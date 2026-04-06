@@ -1,52 +1,66 @@
 package com.example.serviceassistantbackend.entity;
 
-@lombok.Getter
-@lombok.Setter@jakarta.persistence.Entity
-@jakarta.persistence.Table(name = "job_cards")
+import com.example.serviceassistantbackend.enums.JobCardStatus;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "job_cards")
 public class JobCard {
-@jakarta.persistence.Id
-@jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-@jakarta.persistence.Column(name = "id", nullable = false)
-private java.lang.Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-@jakarta.validation.constraints.Size(max = 50)
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.Column(name = "job_card_number", nullable = false, length = 50)
-private java.lang.String jobCardNumber;
+    @Size(max = 50)
+    @NotNull
+    @Column(name = "job_card_number", nullable = false, length = 50)
+    private String jobCardNumber;
 
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY, optional = false)
-@jakarta.persistence.JoinColumn(name = "vehicle_id", nullable = false)
-private com.example.serviceassistantbackend.entity.Vehicle vehicle;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "vehicle_id", nullable = false)
+    private Vehicle vehicle;
 
-@jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
-@jakarta.persistence.JoinColumn(name = "service_type_id")
-private com.example.serviceassistantbackend.entity.ServiceType serviceType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_type_id")
+    private ServiceType serviceType;
 
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY, optional = false)
-@jakarta.persistence.JoinColumn(name = "created_by", nullable = false)
-private com.example.serviceassistantbackend.entity.User createdBy;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
 
-@jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
-@jakarta.persistence.JoinColumn(name = "assigned_mechanic_id")
-private com.example.serviceassistantbackend.entity.User assignedMechanic;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_mechanic_id")
+    private User assignedMechanic;
 
-@org.hibernate.annotations.ColumnDefault("'CREATED'")
-@jakarta.persistence.Lob
-@jakarta.persistence.Column(name = "status")
-private java.lang.String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", insertable = false)
+    private JobCardStatus status;
 
-@jakarta.persistence.Column(name = "estimated_completion_time")
-private java.time.Instant estimatedCompletionTime;
+    @Column(name = "estimated_completion_time")
+    private LocalDateTime estimatedCompletionTime;
 
-@jakarta.persistence.Column(name = "actual_completion_time")
-private java.time.Instant actualCompletionTime;
+    @Column(name = "actual_completion_time")
+    private LocalDateTime actualCompletionTime;
 
-@org.hibernate.annotations.ColumnDefault("CURRENT_TIMESTAMP")
-@jakarta.persistence.Column(name = "created_at")
-private java.time.Instant createdAt;
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_at",insertable = false, updatable = false)
+    private LocalDateTime createdAt;
 
+    @ColumnDefault("0.00")
+    @Column(name = "current_total_amount", precision = 10, scale = 2)
+    private BigDecimal currentTotalAmount;
 
 
 }

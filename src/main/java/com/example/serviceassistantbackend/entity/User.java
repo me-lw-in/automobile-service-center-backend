@@ -1,33 +1,51 @@
 package com.example.serviceassistantbackend.entity;
 
-@lombok.Getter
-@lombok.Setter@jakarta.persistence.Entity
-@jakarta.persistence.Table(name = "users")
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.Instant;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "users")
 public class User {
-@jakarta.persistence.Id
-@jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-@jakarta.persistence.Column(name = "id", nullable = false)
-private java.lang.Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-@jakarta.validation.constraints.Size(max = 255)
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.Column(name = "name", nullable = false)
-private java.lang.String name;
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
 
-@jakarta.validation.constraints.Size(max = 15)
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.Column(name = "phone", nullable = false, length = 15)
-private java.lang.String phone;
+    @Size(max = 15)
+    @NotNull
+    @Column(name = "phone", nullable = false, length = 15)
+    private String phone;
 
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY, optional = false)
-@jakarta.persistence.JoinColumn(name = "role_id", nullable = false)
-private com.example.serviceassistantbackend.entity.Role role;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-@org.hibernate.annotations.ColumnDefault("CURRENT_TIMESTAMP")
-@jakarta.persistence.Column(name = "created_at")
-private java.time.Instant createdAt;
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_at", insertable = false)
+    private Instant createdAt;
 
+    @Size(max = 255)
+    @Column(name = "email")
+    private String email;
+
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "password", nullable = false)
+    private String password;
 
 
 }

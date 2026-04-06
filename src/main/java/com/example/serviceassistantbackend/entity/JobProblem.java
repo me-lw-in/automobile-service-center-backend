@@ -1,28 +1,37 @@
 package com.example.serviceassistantbackend.entity;
 
-@lombok.Getter
-@lombok.Setter@jakarta.persistence.Entity
-@jakarta.persistence.Table(name = "job_problems")
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "job_problems")
 public class JobProblem {
-@jakarta.persistence.Id
-@jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-@jakarta.persistence.Column(name = "id", nullable = false)
-private java.lang.Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-@jakarta.validation.constraints.Size(max = 255)
-@jakarta.persistence.Column(name = "description")
-private java.lang.String description;
+    @Size(max = 255)
+    @Column(name = "description")
+    private String description;
 
-@org.hibernate.annotations.ColumnDefault("0")
-@jakarta.persistence.Column(name = "resolved")
-private java.lang.Boolean resolved;
+    @ColumnDefault("0")
+    @Column(name = "resolved")
+    private Boolean resolved;
 
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY, optional = false)
-@org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
-@jakarta.persistence.JoinColumn(name = "job_card_id", nullable = false)
-private com.example.serviceassistantbackend.entity.JobCard jobCard;
-
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "job_card_id", nullable = false)
+    private JobCard jobCard;
 
 
 }

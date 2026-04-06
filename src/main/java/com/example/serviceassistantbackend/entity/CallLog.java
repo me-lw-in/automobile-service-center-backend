@@ -1,28 +1,35 @@
 package com.example.serviceassistantbackend.entity;
 
-@lombok.Getter
-@lombok.Setter@jakarta.persistence.Entity
-@jakarta.persistence.Table(name = "call_logs")
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "call_logs")
 public class CallLog {
-@jakarta.persistence.Id
-@jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-@jakarta.persistence.Column(name = "id", nullable = false)
-private java.lang.Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-@jakarta.validation.constraints.Size(max = 15)
-@jakarta.persistence.Column(name = "caller_phone", length = 15)
-private java.lang.String callerPhone;
+    @Size(max = 15)
+    @Column(name = "caller_phone", length = 15)
+    private String callerPhone;
 
-@jakarta.persistence.Column(name = "call_arrived_time")
-private java.time.Instant callArrivedTime;
+    @Column(name = "call_arrived_time")
+    private LocalDateTime callArrivedTime;
 
-@jakarta.persistence.Column(name = "call_ended_time")
-private java.time.Instant callEndedTime;
+    @Column(name = "call_ended_time")
+    private LocalDateTime callEndedTime;
 
-@jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
-@jakarta.persistence.JoinColumn(name = "job_card_id")
-private com.example.serviceassistantbackend.entity.JobCard jobCard;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_card_id")
+    private JobCard jobCard;
 
 
 }

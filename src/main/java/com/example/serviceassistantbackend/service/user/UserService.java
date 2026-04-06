@@ -1,4 +1,9 @@
 package com.example.serviceassistantbackend.service.user;
 
-public class UserService {
+import com.example.serviceassistantbackend.dto.user.UserDTO;
+
+public interface UserService {
+    public void createUser(UserDTO dto);
+
+
 }

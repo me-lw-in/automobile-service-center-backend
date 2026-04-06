@@ -1,31 +1,41 @@
 package com.example.serviceassistantbackend.entity;
 
-@lombok.Getter
-@lombok.Setter@jakarta.persistence.Entity
-@jakarta.persistence.Table(name = "parts")
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "parts")
 public class Part {
-@jakarta.persistence.Id
-@jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-@jakarta.persistence.Column(name = "id", nullable = false)
-private java.lang.Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-@jakarta.validation.constraints.Size(max = 100)
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.Column(name = "name", nullable = false, length = 100)
-private java.lang.String name;
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.Column(name = "price", nullable = false, precision = 10, scale = 2)
-private java.math.BigDecimal price;
+    @NotNull
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
-@org.hibernate.annotations.ColumnDefault("0")
-@jakarta.persistence.Column(name = "stock_quantity")
-private java.lang.Integer stockQuantity;
+    @ColumnDefault("0")
+    @Column(name = "stock_quantity")
+    private LocalDateTime stockQuantity;
 
-@org.hibernate.annotations.ColumnDefault("CURRENT_TIMESTAMP")
-@jakarta.persistence.Column(name = "created_at")
-private java.time.Instant createdAt;
-
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
 
 }

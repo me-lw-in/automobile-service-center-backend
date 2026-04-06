@@ -1,23 +1,34 @@
 package com.example.serviceassistantbackend.entity;
 
-@lombok.Getter
-@lombok.Setter@jakarta.persistence.Entity
-@jakarta.persistence.Table(name = "service_types")
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "service_types")
 public class ServiceType {
-@jakarta.persistence.Id
-@jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-@jakarta.persistence.Column(name = "id", nullable = false)
-private java.lang.Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-@jakarta.validation.constraints.Size(max = 100)
-@jakarta.validation.constraints.NotNull
-@jakarta.persistence.Column(name = "name", nullable = false, length = 100)
-private java.lang.String name;
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
-@jakarta.validation.constraints.Size(max = 255)
-@jakarta.persistence.Column(name = "description")
-private java.lang.String description;
-
+    @Size(max = 255)
+    @Column(name = "description")
+    private String description;
+    @NotNull
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
 
 }
