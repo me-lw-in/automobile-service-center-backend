@@ -41,14 +41,27 @@ public class SecurityConfig {
                                 "/api/vehicles"
                                 ).hasRole("SUPER_ADMIN")
 
-                        //
-
-
                         // SERVICE_MANAGER or SERVICE_INCHARGE
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/job-cards"
                         ).hasAnyRole("SERVICE_INCHARGE","SERVICE_MANAGER")
+
+                        //Mechanic
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/job-cards/start"
+                        ).hasAnyRole("MECHANIC")
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/job-problems/**"
+                        ).hasAnyRole("MECHANIC"
+                        ).requestMatchers(
+                                HttpMethod.POST,
+                                "/api/job-cards/*/services",
+                                "/api/job-cards/*/parts",
+                                "/api/job-cards/*/complete"
+                        ).hasAnyRole("MECHANIC")
 
                         .anyRequest().permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

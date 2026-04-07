@@ -8,6 +8,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    show-sql: true
 server:
   port: 8080
   error:

@@ -31,7 +31,7 @@ public class Part {
 
     @ColumnDefault("0")
     @Column(name = "stock_quantity")
-    private LocalDateTime stockQuantity;
+    private Integer stockQuantity;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")

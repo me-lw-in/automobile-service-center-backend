@@ -19,11 +19,9 @@ public class Service {
     private Long id;
 
     @Size(max = 100)
-    @NotNull
     @Column(name = "service_name", nullable = false, length = 100)
     private String serviceName;
 
-    @NotNull
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 

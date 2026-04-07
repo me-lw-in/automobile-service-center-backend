@@ -29,10 +29,10 @@ public class Bill {
     private BigDecimal totalAmount;
 
     @ColumnDefault("0")
-    @Column(name = "paid")
+    @Column(name = "paid", insertable = false)
     private Boolean paid;
 
-    @Column(name = "payment_time")
+    @Column(name = "payment_time", insertable = false)
     private LocalDateTime paymentTime;
 
 

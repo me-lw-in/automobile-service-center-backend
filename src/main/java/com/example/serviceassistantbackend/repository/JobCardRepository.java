@@ -8,5 +8,5 @@ import java.util.Collection;
 
 public interface JobCardRepository extends JpaRepository<JobCard, Long> {
 
-    boolean existsByVehicleIdAndStatusIn(Long vehicleId, Collection<JobCardStatus> statuses);
+    boolean existsByVehicleIdAndStatusNotIn(Long vehicleId, Collection<JobCardStatus> statuses);
 }

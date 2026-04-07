@@ -24,7 +24,7 @@ public class JobProblem {
     private String description;
 
     @ColumnDefault("0")
-    @Column(name = "resolved")
+    @Column(name = "resolved", insertable = false)
     private Boolean resolved;
 
     @NotNull
