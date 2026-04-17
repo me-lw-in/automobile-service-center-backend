@@ -19,7 +19,7 @@ public class JobProblemService {
         var jobProblem = jobProblemRepository.findById(problemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Problem not found"));
 
-        jobProblem.setResolved(true);
+        jobProblem.setResolved(!jobProblem.getResolved());
 
         jobProblemRepository.save(jobProblem);
     }

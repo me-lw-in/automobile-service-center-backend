@@ -55,11 +55,20 @@ public class SecurityConfig {
                                 HttpMethod.POST,
                                 "/api/job-cards"
                         ).hasAnyRole("SERVICE_INCHARGE","SERVICE_MANAGER")
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/job-cards/my-job-cards"
+                        ).hasAnyRole("SERVICE_INCHARGE","SERVICE_MANAGER")
 
                         //Mechanic
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/job-cards/start"
+                        ).hasAnyRole("MECHANIC")
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/job-cards/mechanic",
+                                "/api/job-cards/mechanic/assigned-jobs"
                         ).hasAnyRole("MECHANIC")
                         .requestMatchers(
                                 HttpMethod.PATCH,
@@ -75,7 +84,8 @@ public class SecurityConfig {
                         // everyone except customer
                         .requestMatchers(
                                 HttpMethod.GET,
-                                "/api/services"
+                                    "/api/services",
+                                "/api/parts"
                         ).hasAnyRole("SUPER_ADMIN","SERVICE_INCHARGE","SERVICE_MANAGER", "MECHANIC")
 
                         .anyRequest().permitAll())
@@ -98,7 +108,7 @@ public class SecurityConfig {
         // Allow requests from your React development server
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://192.168.0.105:5173"));
         // Allow all common HTTP methods
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         // Allow all headers, which is important for sending the JWT token
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         // Allow credentials like cookies and the Authorization header

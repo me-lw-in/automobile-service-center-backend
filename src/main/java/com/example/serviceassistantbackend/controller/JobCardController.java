@@ -1,7 +1,12 @@
 package com.example.serviceassistantbackend.controller;
 
 import com.example.serviceassistantbackend.dto.jobcard.JobCardRequestDTO;
+import com.example.serviceassistantbackend.dto.jobcard.MechanicAssignedJobCardsWrapperDTO;
+import com.example.serviceassistantbackend.dto.jobcard.MechanicJobCardPageResponseDTO;
+import com.example.serviceassistantbackend.dto.jobcard.ServiceInChargeJobCardDTO;
 import com.example.serviceassistantbackend.dto.jobcard.StartJobRequestDTO;
+
+import java.util.List;
 import com.example.serviceassistantbackend.dto.jobcard.StartJobResponseDTO;
 import com.example.serviceassistantbackend.dto.part.AddPartRequestDTO;
 import com.example.serviceassistantbackend.dto.service.AddServiceRequestDTO;
@@ -22,6 +27,19 @@ public class JobCardController {
     public ResponseEntity<String> createJobCard(@RequestBody @Valid JobCardRequestDTO dto){
         jobCardService.createJobCard(dto);
         return ResponseEntity.ok("Job card created successfully");
+    }
+
+    @GetMapping("/mechanic")
+    public ResponseEntity<MechanicJobCardPageResponseDTO> getCreatedJobCardsForMechanic(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(jobCardService.getCreatedJobCardsForMechanic(page, size));
+    }
+
+    @GetMapping("/mechanic/assigned-jobs")
+    public ResponseEntity<MechanicAssignedJobCardsWrapperDTO> getAssignedJobsForMechanic(
+            @RequestParam(required = false) String status) {
+        return ResponseEntity.ok(jobCardService.getAssignedJobsForMechanic(status));
     }
 
     @PutMapping("/start")
@@ -48,6 +66,11 @@ public class JobCardController {
     public ResponseEntity<String> completeJob(@PathVariable Long jobCardId) {
         jobCardService.completeJob(jobCardId);
         return ResponseEntity.ok("Bill generated successfully");
+    }
+
+    @GetMapping("/my-job-cards")
+    public ResponseEntity<List<ServiceInChargeJobCardDTO>> getJobCardsCreatedByCurrentUser() {
+        return ResponseEntity.ok(jobCardService.getJobCardsCreatedByCurrentUser());
     }
 
 }

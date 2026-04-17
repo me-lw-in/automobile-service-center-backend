@@ -2,7 +2,10 @@ package com.example.serviceassistantbackend.repository;
 
 import com.example.serviceassistantbackend.entity.JobCard;
 import com.example.serviceassistantbackend.enums.JobCardStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,5 +26,17 @@ public interface JobCardRepository extends JpaRepository<JobCard, Long> {
     """)
     List<JobCard> findLatestByVehicleNumber(@Param("vehicleNumber") String vehicleNumber);
 
-    boolean existsByVehicleIdAndStatusNotIn(Long vehicleId, Collection<JobCardStatus> statuses);
+    @EntityGraph(attributePaths = {"vehicle", "vehicle.model", "serviceType"})
+    Page<JobCard> findByStatusOrderByCreatedAtAsc(JobCardStatus status, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"vehicle", "vehicle.model"})
+    List<JobCard> findByAssignedMechanicIdOrderByCreatedAtDesc(Long assignedMechanicId);
+
+    @EntityGraph(attributePaths = {"vehicle", "vehicle.model"})
+    List<JobCard> findByAssignedMechanicIdAndStatusOrderByCreatedAtDesc(Long assignedMechanicId, JobCardStatus status);
+
+    @EntityGraph(attributePaths = {"vehicle", "vehicle.owner", "serviceType"})
+    List<JobCard> findByCreatedByIdOrderByCreatedAtDesc(Long createdById);
+
+    boolean existsByVehicleIdAndStatusIn(Long vehicleId, Collection<JobCardStatus> statuses);
 }
