@@ -36,6 +36,11 @@ public class JobCardController {
         return ResponseEntity.ok(jobCardService.getCreatedJobCardsForMechanic(page, size));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getTotalJobCardCount() {
+        return ResponseEntity.ok(jobCardService.getTotalJobCardCount());
+    }
+
     @GetMapping("/mechanic/assigned-jobs")
     public ResponseEntity<MechanicAssignedJobCardsWrapperDTO> getAssignedJobsForMechanic(
             @RequestParam(required = false) String status) {

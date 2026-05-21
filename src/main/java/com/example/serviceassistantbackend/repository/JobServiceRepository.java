@@ -15,4 +15,6 @@ public interface JobServiceRepository extends JpaRepository<JobService, Long> {
     List<JobService> findByJobCardId(Long jobCardId);
 
     boolean existsByJobCardIdAndServiceId(Long jobCardId, Long serviceId);
+
+    boolean existsByPerformedById(Long performedById);
 }

@@ -397,4 +397,8 @@ public class JobCardService {
                         .build())
                 .toList();
     }
+
+    public Long getTotalJobCardCount() {
+        return jobCardRepository.count();
+    }
 }

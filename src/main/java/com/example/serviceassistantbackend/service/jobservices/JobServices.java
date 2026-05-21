@@ -25,4 +25,25 @@ public class JobServices {
         }
         return serviceDTOList;
     }
+
+    public ServiceDTO createService(ServiceDTO dto) {
+        var service = new com.example.serviceassistantbackend.entity.Service();
+        service.setServiceName(dto.getServiceName().trim());
+        service.setPrice(dto.getPrice());
+        service = serviceRepository.save(service);
+
+        dto.setId(service.getId());
+        return dto;
+    }
+
+    public ServiceDTO updateService(Long id, ServiceDTO dto) {
+        var service = serviceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Service not found with id: " + id));
+        service.setServiceName(dto.getServiceName().trim());
+        service.setPrice(dto.getPrice());
+        service = serviceRepository.save(service);
+
+        dto.setId(service.getId());
+        return dto;
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,6 +26,7 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @AllArgsConstructor
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
@@ -49,6 +51,18 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/vehicles"
                                 ).hasRole("SUPER_ADMIN")
+                        .requestMatchers(
+                                "/api/roles/**"
+                        ).hasRole("SUPER_ADMIN")
+                        .requestMatchers(
+                                "/api/users/me"
+                        ).authenticated()
+                        .requestMatchers(
+                                "/api/users/**"
+                        ).hasRole("SUPER_ADMIN")
+                        .requestMatchers(
+                                "/api/models/**"
+                        ).hasRole("SUPER_ADMIN")
 
                         // SERVICE_MANAGER or SERVICE_INCHARGE
                         .requestMatchers(
@@ -85,7 +99,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.GET,
                                     "/api/services",
-                                "/api/parts"
+                                "/api/parts",
+                                "/api/service-types"
                         ).hasAnyRole("SUPER_ADMIN","SERVICE_INCHARGE","SERVICE_MANAGER", "MECHANIC")
 
                         .anyRequest().permitAll())

@@ -13,3 +13,10 @@ server:
   port: 8080
   error:
     include-message: always
+
+app:
+  super-admin:
+    email: superadmin@gmail.com
+    password: Welcome@123
+    name: Super Admin
+    phone: 9988776655

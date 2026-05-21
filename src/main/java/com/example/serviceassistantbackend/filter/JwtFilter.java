@@ -32,16 +32,26 @@ public class JwtFilter extends OncePerRequestFilter {
         var token = authHeader.replace("Bearer ", "");
         try {
             Claims claims = jwtService.extractAllClaims(token);
-            var userId = claims.get("userId", Long.class);
-            var role = claims.get("role", String.class).toUpperCase().trim();
+            Object userIdClaim = claims.get("userId");
+            Long userId = null;
+            if (userIdClaim instanceof Number) {
+                userId = ((Number) userIdClaim).longValue();
+            } else if (userIdClaim instanceof String) {
+                try {
+                    userId = Long.valueOf((String) userIdClaim);
+                } catch (NumberFormatException ignored) {
+                }
+            }
+            var role = claims.get("role", String.class);
+            role = role != null ? role.toUpperCase().trim() : "";
 
             var authentication = new UsernamePasswordAuthenticationToken(
-                    userId,
+                    userId != null ? userId : claims.getSubject(),
                     null,
                     List.of(new SimpleGrantedAuthority("ROLE_" + role))
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("""

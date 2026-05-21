@@ -39,4 +39,10 @@ public interface JobCardRepository extends JpaRepository<JobCard, Long> {
     List<JobCard> findByCreatedByIdOrderByCreatedAtDesc(Long createdById);
 
     boolean existsByVehicleIdAndStatusIn(Long vehicleId, Collection<JobCardStatus> statuses);
+
+    boolean existsByVehicleId(Long vehicleId);
+
+    boolean existsByCreatedById(Long createdById);
+
+    boolean existsByAssignedMechanicId(Long assignedMechanicId);
 }

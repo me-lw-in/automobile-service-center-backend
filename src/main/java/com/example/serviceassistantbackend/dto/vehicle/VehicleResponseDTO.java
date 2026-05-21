@@ -8,6 +8,8 @@ import lombok.Setter;
 public class VehicleResponseDTO {
     private Long id;
     private String vehicleNumber;
+    private Long ownerId;
     private String ownerName;
+    private Long modelId;
     private String modelName;
 }

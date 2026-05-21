@@ -20,6 +20,26 @@ public class VehicleController {
         return vehicleService.createVehicle(dto);
     }
 
+    @GetMapping
+    public List<VehicleResponseDTO> getAll() {
+        return vehicleService.getAllVehicles();
+    }
+
+    @GetMapping("/{id}")
+    public VehicleResponseDTO getById(@PathVariable Long id) {
+        return vehicleService.getVehicleById(id);
+    }
+
+    @PutMapping("/{id}")
+    public VehicleResponseDTO update(@PathVariable Long id, @RequestBody @Valid VehicleRequestDTO dto) {
+        return vehicleService.updateVehicle(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        vehicleService.deleteVehicle(id);
+    }
+
     @GetMapping("/number/{vehicleNumber}")
     public VehicleResponseDTO getByNumber(@PathVariable String vehicleNumber) {
         return vehicleService.getByVehicleNumber(vehicleNumber);

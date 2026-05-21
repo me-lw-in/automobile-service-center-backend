@@ -8,6 +8,7 @@ import com.example.serviceassistantbackend.entity.Vehicle;
 import com.example.serviceassistantbackend.repository.ModelRepository;
 import com.example.serviceassistantbackend.repository.UserRepository;
 import com.example.serviceassistantbackend.repository.VehicleRepository;
+import com.example.serviceassistantbackend.repository.JobCardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
     private final ModelRepository modelRepository;
+    private final JobCardRepository jobCardRepository;
 
     public VehicleResponseDTO createVehicle(VehicleRequestDTO dto) {
 
@@ -61,11 +63,61 @@ public class VehicleService {
                 .toList();
     }
 
+    public List<VehicleResponseDTO> getAllVehicles() {
+        return vehicleRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    public VehicleResponseDTO getVehicleById(Long id) {
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
+        return mapToResponse(vehicle);
+    }
+
+    public VehicleResponseDTO updateVehicle(Long id, VehicleRequestDTO dto) {
+        Vehicle existing = vehicleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"));
+
+        if (!existing.getVehicleNumber().equalsIgnoreCase(dto.getVehicleNumber()) &&
+                vehicleRepository.findByVehicleNumber(dto.getVehicleNumber()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle number already exists");
+        }
+
+        User owner = userRepository.findById(dto.getOwnerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Model model = modelRepository.findById(dto.getModelId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Model not found"));
+
+        existing.setVehicleNumber(dto.getVehicleNumber().trim().toUpperCase());
+        existing.setOwner(owner);
+        existing.setModel(model);
+        vehicleRepository.save(existing);
+
+        return mapToResponse(existing);
+    }
+
+    public void deleteVehicle(Long id) {
+        if (!vehicleRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found");
+        }
+
+        if (jobCardRepository.existsByVehicleId(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete vehicle: associated jobcards exist");
+        }
+
+        vehicleRepository.deleteById(id);
+    }
+
     private VehicleResponseDTO mapToResponse(Vehicle vehicle) {
         VehicleResponseDTO dto = new VehicleResponseDTO();
         dto.setId(vehicle.getId());
         dto.setVehicleNumber(vehicle.getVehicleNumber());
+        dto.setOwnerId(vehicle.getOwner().getId());
         dto.setOwnerName(vehicle.getOwner().getName());
+        dto.setModelId(vehicle.getModel().getId());
         dto.setModelName(vehicle.getModel().getName());
         return dto;
     }
